@@ -17,12 +17,12 @@ use App\Http\Controllers\LoginController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
 
 Route::middleware('guest')->group(function () {
     Route::post('/register', [LoginController::class, 'register'])->name('register');
-    Route::get('/login', [LoginController::class, 'login'])->name('login');
+    Route::post('/login', [LoginController::class, 'login'])->name('login');
+});
+
+Route::middleware('auth')->group(function () {
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 });

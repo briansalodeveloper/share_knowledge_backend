@@ -3,45 +3,54 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\Response;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+
+use App\Services\LoginService;
 
 class LoginController extends Controller
 {
 
-    public function register(Request $request)
-    {
-        return User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
-        ]);
+    public function __construct(
+        LoginService $loginService
+    ) {
+        $this->loginService = $loginService;
     }
 
-    public function login(Request $request)
+    /**
+     * register new user
+     *
+     * @param RegisterRequest $request
+     */
+    public function register(RegisterRequest $request)
     {
-        if (!Auth::attempt($request->only('email','password'))) {
-            return response([
-                'message' => 'invalid credentials'
-            ], Response::HTTP_UNAUTHORIZED );
-        }
-        
-        $user = Auth::user();
-       
-        $token = $user->createToken("$user->name api_token")->plainTextToken;
-        $response = [
-            'id' => $user->id,
-            'name' => $user->name,
-            'emai' => $user->email,
-            'token' => $token,
-        ];
-        return $response;
+        $rtn = $this->loginService->registerUser();
+        return $rtn;
     }
 
-    public function logout()
+    /**
+     * log in user
+     *
+     * @param LoginRequest $request
+     * @throws \App\Exceptions\GeneralJsonException
+     */
+    public function login(LoginRequest $request)
     {
-        return "Successfully logout";
+        $rtn = $this->loginService->loginUser();
+        return $rtn;
     }
+
+    /**
+     * logout user
+     *
+     */    
+    public function logout($id)
+    {
+        $rtn = $this->loginService->logoutUser();
+        return $rtn;
+
+    }
+
+
 }

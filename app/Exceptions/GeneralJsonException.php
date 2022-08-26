@@ -16,10 +16,12 @@ class GeneralJsonException extends Exception
     //render the exception as an http response
     public function render($request)
     {
-        if($this->getMessage() == AppConstant::INVALID_CREDENTIALS) {
-            return new JsonResponse([
+        switch($this->getMessage()) {
+            case(AppConstant::INVALID_CREDENTIALS):
+                return new JsonResponse([
                     'unauthorized' => $this->getMessage(),
-            ], $this->code);
+                ], $this->code);
+            break;
         }
     }
 }
