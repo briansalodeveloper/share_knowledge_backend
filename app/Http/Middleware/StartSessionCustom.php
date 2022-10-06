@@ -45,7 +45,7 @@ class StartSessionCustom extends StartSession
         return $response;
     }
 
-    // overwrite getSession function
+    // overwrite getSession function in StartSession class
     public function getSession(Request $request)
     {
         $session = $this->manager->driver();
@@ -56,5 +56,15 @@ class StartSessionCustom extends StartSession
         $session->setId($token);
         
         return $session;
+    }
+
+    // overwrite startSession function in StartSession class
+    protected function startSession(Request $request)
+    {
+        return tap($this->getSession($request), function ($session) use ($request) {
+            $session->setRequestOnHandler($request);
+
+            $session->start();
+        });
     }
 }
