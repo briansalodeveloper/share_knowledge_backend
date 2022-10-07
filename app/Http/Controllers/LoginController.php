@@ -38,7 +38,10 @@ class LoginController extends Controller
     public function login(LoginRequest $request)
     {
         $rtn = $this->loginService->loginUser();
-        return $rtn;
+
+        return response()->json([
+            'token' => session('api.data.token'),
+        ]);
     }
 
     /**

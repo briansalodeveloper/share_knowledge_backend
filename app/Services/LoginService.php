@@ -40,16 +40,11 @@ class LoginService
         }
 
         $user = Auth::user();
-        $token = $user->createToken("$user->name api_token")->plainTextToken;
+        session()->regenerate();
+        session()->put('api.data.login', true);
+        session()->put('api.data.customer_id', $user->id);
+        session()->put('api.data.token', session()->getId());
 
-        $rtn = [
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'token' => $token,
-        ];
-
-        return $rtn;
     }
 
     /**

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiAddressController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\FacebookSocialiteController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,8 +20,11 @@ use App\Http\Controllers\LoginController;
 
 
 Route::middleware('guest')->group(function () {
-    Route::post('/register', [LoginController::class, 'register'])->name('register');
-    Route::post('/login', [LoginController::class, 'login'])->name('login');
+    Route::post('/register', [LoginController::class, 'register']);
+    Route::post('/login', [LoginController::class, 'login']);
+    //facebook socialite
+    Route::get('/facebook', [FacebookSocialiteController::class, 'redirectToFB']);
+    Route::get('/callback/facebook', [FacebookSocialiteController::class, 'handleCallback']);
 });
 
 Route::middleware('auth')->group(function () {
