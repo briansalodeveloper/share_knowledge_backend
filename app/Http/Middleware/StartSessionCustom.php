@@ -26,7 +26,8 @@ class StartSessionCustom extends StartSession
         // so that the data is ready for an application. Note that the Laravel sessions
         // do not make use of PHP "native" sessions in any way since they are crappy.
         $request->setLaravelSession(
-            $session = $this->startSession($request)
+            //passing dummy data in second parameter to avoid error in startSession function
+            $session = $this->startSession($request,'dummyData')
         );
 
         $this->collectGarbage($session);
@@ -59,7 +60,9 @@ class StartSessionCustom extends StartSession
     }
 
     // overwrite startSession function in StartSession class
-    protected function startSession(Request $request)
+    //we can overwrite the logic inside the startSession function but we can't overwrite the parameter count that need to be passed
+    //the original startSession function has two parameter need to be passed. thats why, we still have two parameter here, even though we only need one parameter
+    protected function startSession(Request $request, $session)
     {
         return tap($this->getSession($request), function ($session) use ($request) {
             $session->setRequestOnHandler($request);
