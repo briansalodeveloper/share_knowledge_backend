@@ -22,6 +22,16 @@ class GeneralJsonException extends Exception
                     'unauthorized' => $this->getMessage(),
                 ], $this->code);
             break;
+            case(AppConstant::UNAUTHORIZED_NO_LOGIN_SESSION):
+                return new JsonResponse([
+                    'unauthorized' => $this->getMessage(),
+                ], $this->code);
+            break;
+            case(AppConstant::UNAUTHORIZED_NO_CUSTOMER_ID_SESSION):
+                return new JsonResponse([
+                    'unauthorized' => $this->getMessage(),
+                ], $this->code);
+            break;
         }
     }
 }
