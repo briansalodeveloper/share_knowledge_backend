@@ -3,10 +3,12 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\ApiAddressController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\FacebookSocialiteController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\TagController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,6 +29,10 @@ Route::middleware('guest')->group(function () {
     Route::get('/callback/facebook', [FacebookSocialiteController::class, 'handleCallback']);
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('check.api.token')->group(function () {
+    Route::get('/all_tags', [TagController::class, 'allTags']);
+    Route::post('/create_post', [PostController::class, 'createPost']);
+    Route::get('/user/info', [UserController::class, 'getAuthDetails']);
+    Route::get('/checkAuth', [UserController::class, 'checkAuth']);
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 });
